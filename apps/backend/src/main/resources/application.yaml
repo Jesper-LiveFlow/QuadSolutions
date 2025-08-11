@@ -4,4 +4,5 @@ spring:
 
 third-party:
   opentdb:
-    url: https://opentdb.com
+    url: https://opentdb.com/api.php
+    questions: 10
