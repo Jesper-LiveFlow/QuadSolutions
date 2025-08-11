@@ -119,7 +119,6 @@ public class TriviaService implements QuizService {
 
         return new QuestionDto(
                 question.getType(),
-                question.getDifficulty(),
                 question.getCategory(),
                 question.getQuestion(),
                 allAnswers
