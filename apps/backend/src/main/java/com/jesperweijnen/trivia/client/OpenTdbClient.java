@@ -1,4 +1,4 @@
-package com.jesperweijnen.trivia.service;
+package com.jesperweijnen.trivia.client;
 
 import com.jesperweijnen.trivia.dto.QuestionDto;
 import com.jesperweijnen.trivia.dto.ResultDto;
@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
  */
 @Service
 @RequiredArgsConstructor
-public class TriviaService implements QuizService {
+public class OpenTdbClient implements TriviaApiClient {
     private final AnswerRepository answerRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
