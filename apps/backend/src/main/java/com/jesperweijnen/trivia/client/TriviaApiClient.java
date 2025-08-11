@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface TriviaApiClient {
     List<QuestionDto> fetchQuestions(String uuid);
-
-    ResultDto fetchResult(String uuid, List<String> userAnswers);
 }

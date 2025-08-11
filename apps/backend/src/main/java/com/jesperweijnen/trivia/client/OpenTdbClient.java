@@ -58,26 +58,6 @@ public class OpenTdbClient implements TriviaApiClient {
     }
 
     /**
-     * Calculates the quiz result for a given UUID based on the user-submitted answers.
-     *
-     * @param uuid unique identifier for the quiz session/player
-     * @param userAnswers list of answers submitted by the user
-     * @return ResultDto containing the score, total questions, user answers, and correct answers
-     */
-    @Override
-    public ResultDto fetchResult(String uuid, List<String> userAnswers) {
-        // Get the correct answers
-        var correctAnswers = answerRepository.getAnswers(uuid);
-
-        // Get score and total number of questions
-        byte score = calculateScore(userAnswers, correctAnswers);
-        byte totalQuestions = (byte) correctAnswers.size();
-
-        // Return result
-        return new ResultDto(score, totalQuestions, userAnswers, correctAnswers);
-    }
-
-    /**
      * Extracts the list of correct answers from the given list of trivia questions.
      *
      * @param uuid      the unique identifier for the current game session (not used in this method but can be used for logging or future enhancements)
@@ -123,24 +103,5 @@ public class OpenTdbClient implements TriviaApiClient {
                 question.getQuestion(),
                 allAnswers
         );
-    }
-
-    /**
-     * Calculates the score by comparing user answers with correct answers.
-     *
-     * @param userAnswers    list of answers provided by the user
-     * @param correctAnswers list of correct answers stored in the repository
-     * @return number of correct answers matched
-     */
-    private byte calculateScore(List<String> userAnswers, List<String> correctAnswers) {
-        // Make sure there is at least 1 user and 1 correct answer
-        if (userAnswers == null || correctAnswers == null) {
-            return 0;
-        }
-
-        // Count the score
-        return (byte) IntStream.range(0, Math.min(userAnswers.size(), correctAnswers.size()))
-                .filter(index -> userAnswers.get(index).equalsIgnoreCase(correctAnswers.get(index)))
-                .count();
     }
 }
