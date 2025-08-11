@@ -14,7 +14,6 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class TriviaService {
     private final AnswerRepository answerRepository;
-    private final ResultCalculatorService resultCalculatorService;
 
     /**
      * Calculates the trivia result for a given UUID based on the user-submitted answers.
@@ -28,7 +27,7 @@ public class TriviaService {
         var correctAnswers = answerRepository.getAnswers(uuid);
 
         // Get score and total number of questions
-        byte score = resultCalculatorService.calculateScore(userAnswers, correctAnswers);
+        byte score = ResultCalculatorService.calculateScore(userAnswers, correctAnswers);
         byte totalQuestions = (byte) correctAnswers.size();
 
         // Return result
