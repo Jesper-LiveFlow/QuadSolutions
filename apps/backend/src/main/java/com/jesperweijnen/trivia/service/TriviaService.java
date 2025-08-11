@@ -1,6 +1,7 @@
 package com.jesperweijnen.trivia.service;
 
 import com.jesperweijnen.trivia.dto.QuestionDto;
+import com.jesperweijnen.trivia.dto.ResultDto;
 import com.jesperweijnen.trivia.model.OpenTdbQuestion;
 import com.jesperweijnen.trivia.model.OpenTdbResponse;
 import com.jesperweijnen.trivia.repository.AnswerRepository;
@@ -12,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Trivia business logic.
@@ -23,12 +24,20 @@ public class TriviaService implements QuizService {
     private final AnswerRepository answerRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
+    // API url for Open Trivia DB
     @Value("${third-party.opentdb.url}")
     private String opentdbUrl;
-
+    // Number of questions to fetch from Open Trivia DB
     @Value("${third-party.opentdb.questions}")
     private byte questionTotal;
 
+    /**
+     * Fetches trivia questions from the Open Trivia Database API for a given UUID.
+     *
+     * @param uuid unique identifier for the quiz session/player
+     * @return list of question DTOs with shuffled answers, excluding the correct answer data
+     * @throws RuntimeException if the external API response is invalid or empty
+     */
     @Override
     public List<QuestionDto> fetchQuestions(String uuid) {
         // Fetch response from openTdb
@@ -46,6 +55,26 @@ public class TriviaService implements QuizService {
 
         // Map questions to QuestionDto with shuffled answers (otherwise the correct answer will always be as last)
         return mapQuestions(questions);
+    }
+
+    /**
+     * Calculates the quiz result for a given UUID based on the user-submitted answers.
+     *
+     * @param uuid unique identifier for the quiz session/player
+     * @param userAnswers list of answers submitted by the user
+     * @return ResultDto containing the score, total questions, user answers, and correct answers
+     */
+    @Override
+    public ResultDto fetchResult(String uuid, List<String> userAnswers) {
+        // Get the correct answers
+        var correctAnswers = answerRepository.getAnswers(uuid);
+
+        // Get score and total number of questions
+        byte score = calculateScore(userAnswers, correctAnswers);
+        byte totalQuestions = (byte) correctAnswers.size();
+
+        // Return result
+        return new ResultDto(score, totalQuestions, userAnswers, correctAnswers);
     }
 
     /**
@@ -95,5 +124,24 @@ public class TriviaService implements QuizService {
                 question.getQuestion(),
                 allAnswers
         );
+    }
+
+    /**
+     * Calculates the score by comparing user answers with correct answers.
+     *
+     * @param userAnswers    list of answers provided by the user
+     * @param correctAnswers list of correct answers stored in the repository
+     * @return number of correct answers matched
+     */
+    private byte calculateScore(List<String> userAnswers, List<String> correctAnswers) {
+        // Make sure there is at least 1 user and 1 correct answer
+        if (userAnswers == null || correctAnswers == null) {
+            return 0;
+        }
+
+        // Count the score
+        return (byte) IntStream.range(0, Math.min(userAnswers.size(), correctAnswers.size()))
+                .filter(index -> userAnswers.get(index).equalsIgnoreCase(correctAnswers.get(index)))
+                .count();
     }
 }
