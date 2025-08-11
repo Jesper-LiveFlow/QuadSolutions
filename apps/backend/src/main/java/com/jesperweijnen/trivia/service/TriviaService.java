@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class TriviaService {
     private final AnswerRepository answerRepository;
+    private final ResultCalculatorService resultCalculatorService;
 
     /**
      * Calculates the trivia result for a given UUID based on the user-submitted answers.
@@ -27,29 +28,10 @@ public class TriviaService {
         var correctAnswers = answerRepository.getAnswers(uuid);
 
         // Get score and total number of questions
-        byte score = calculateScore(userAnswers, correctAnswers);
+        byte score = resultCalculatorService.calculateScore(userAnswers, correctAnswers);
         byte totalQuestions = (byte) correctAnswers.size();
 
         // Return result
         return new ResultDto(score, totalQuestions, userAnswers, correctAnswers);
-    }
-
-    /**
-     * Calculates the score by comparing user answers with correct answers.
-     *
-     * @param userAnswers    list of answers provided by the user
-     * @param correctAnswers list of correct answers stored in the repository
-     * @return number of correct answers matched
-     */
-    private byte calculateScore(List<String> userAnswers, List<String> correctAnswers) {
-        // Make sure there is at least 1 user and 1 correct answer
-        if (userAnswers == null || correctAnswers == null) {
-            return 0;
-        }
-
-        // Count the score
-        return (byte) IntStream.range(0, Math.min(userAnswers.size(), correctAnswers.size()))
-                .filter(index -> userAnswers.get(index).equalsIgnoreCase(correctAnswers.get(index)))
-                .count();
     }
 }
