@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: trivia
+
+third-party:
+  opentdb:
+    url: https://opentdb.com
