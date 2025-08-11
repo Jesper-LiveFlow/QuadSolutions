@@ -1,10 +1,8 @@
 package com.jesperweijnen.trivia.client;
 
 import com.jesperweijnen.trivia.dto.QuestionDto;
-import com.jesperweijnen.trivia.dto.ResultDto;
 import com.jesperweijnen.trivia.model.OpenTdbQuestion;
 import com.jesperweijnen.trivia.model.OpenTdbResponse;
-import com.jesperweijnen.trivia.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,15 +11,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
-/**
- * Trivia business logic.
- */
 @Service
 @RequiredArgsConstructor
 public class OpenTdbClient implements TriviaApiClient {
-    private final AnswerRepository answerRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
     // API url for Open Trivia DB
@@ -50,9 +43,6 @@ public class OpenTdbClient implements TriviaApiClient {
         // We can now assume that the questions are in the response's results
         var questions = response.getResults();
 
-        // Save correct answers in AnswerRepository
-        answerRepository.saveAnswers(uuid, getCorrectAnswers(uuid, questions));
-
         // Map questions to QuestionDto with shuffled answers (otherwise the correct answer will always be as last)
         return mapQuestions(questions);
     }
@@ -64,12 +54,13 @@ public class OpenTdbClient implements TriviaApiClient {
      * @param questions the list of questions received from the Open Trivia Database API
      * @return a list of correct answers corresponding to each question, preserving order
      */
-    private List<String> getCorrectAnswers(String uuid, List<OpenTdbQuestion> questions) {
+    @Override
+    public List<String> getCorrectAnswers(String uuid, List<QuestionDto> questions) {
         // Extract correct answers using streams: OpenTdbResponse -> List of OpenTdbQuestion -> Map to list of
         // (String) correctAnswers -> Convert to list
         return questions
                 .stream()
-                .map(OpenTdbQuestion::getCorrectAnswer)
+                .map(QuestionDto::getCorrectAnswer)
                 .toList();
     }
 
@@ -101,7 +92,8 @@ public class OpenTdbClient implements TriviaApiClient {
                 question.getType(),
                 question.getCategory(),
                 question.getQuestion(),
-                allAnswers
+                allAnswers,
+                question.getCorrectAnswer()
         );
     }
 }

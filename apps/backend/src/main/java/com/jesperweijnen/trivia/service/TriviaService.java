@@ -1,19 +1,40 @@
 package com.jesperweijnen.trivia.service;
 
+import com.jesperweijnen.trivia.client.TriviaApiClient;
 import com.jesperweijnen.trivia.dto.QuestionDto;
 import com.jesperweijnen.trivia.dto.ResultDto;
-import com.jesperweijnen.trivia.model.OpenTdbResponse;
 import com.jesperweijnen.trivia.repository.AnswerRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.IntStream;
 
+/**
+ * Trivia business logic.
+ */
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class TriviaService {
+    private final TriviaApiClient triviaApiClient;
     private final AnswerRepository answerRepository;
+
+    /**
+     * Fetches trivia questions from a Trivia API Client and saves correct answers in a Answer Repository
+     *
+     * @param uuid unique identifier for the quiz session/player
+     * @return list of question DTOs
+     */
+    public List<QuestionDto> getQuestions(String uuid) {
+        // Get questions and correct answers
+        var questions = triviaApiClient.fetchQuestions(uuid);
+        var correctAnswers = triviaApiClient.getCorrectAnswers(uuid, questions);
+
+        // Save correct answers in AnswerRepository
+        answerRepository.saveAnswers(uuid, correctAnswers);
+
+        // Return questions
+        return questions;
+    }
 
     /**
      * Calculates the trivia result for a given UUID based on the user-submitted answers.
