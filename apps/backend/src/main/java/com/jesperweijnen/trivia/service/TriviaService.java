@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class TriviaService implements QuestionService {
+public class TriviaService implements QuizService {
     private final AnswerRepository answerRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
