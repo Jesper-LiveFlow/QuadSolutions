@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@keyframes slow-bg-move {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Utility class to apply the animation */
+.animate-slow-bg-move {
+  animation: slow-bg-move 10s linear infinite;
+  background-size: 200% 200%; /* Makes the gradient larger to allow smooth sliding */
+}
