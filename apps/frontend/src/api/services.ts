@@ -83,7 +83,13 @@ const questions: Question[] = [
  * @returns {Promise<Question[]>} List of trivia questions
  */
 export const getQuestions = async (uuid: string): Promise<Question[]> => {
-  return Promise.resolve(questions);
+  try {
+    const { data } = await baseApi.get<Question[]>(`/${QUESTIONS}?uuid=${uuid}`);
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 // --------------------------------------------------------
 
@@ -95,9 +101,9 @@ export const getQuestions = async (uuid: string): Promise<Question[]> => {
  */
 export const checkAnswers = async (uuid: string, userAnswers: unknown): Promise<Result> => {
   try {
-    const response = await baseApi.post<Result>(`/${CHECK_ANSWERS}?uuid=${uuid}`, userAnswers);
+    const { data } = await baseApi.post<Result>(`/${CHECK_ANSWERS}?uuid=${uuid}`, userAnswers);
 
-    return response.data;
+    return data;
   } catch (error) {
     throw error;
   }

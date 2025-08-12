@@ -4,6 +4,7 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 /** TYPE IMPORTS */
 import type { Question } from "@/types/Question";
+import type { Result } from "@/types/Result";
 
 // Define Pinia Store
 export const useTriviaStore = defineStore("trivia", () => {
@@ -13,6 +14,7 @@ export const useTriviaStore = defineStore("trivia", () => {
   const currentQuestionNum = ref(0);
   const totalQuestions = ref(0);
   const userAnswers = ref<string[]>([]);
+  const result = ref<Result>(null);
   /** ACTIONS */
   const setQuestions = (newQuestions: Question[]) => {
     // Set new questions and init states
@@ -22,12 +24,25 @@ export const useTriviaStore = defineStore("trivia", () => {
     totalQuestions.value = newQuestions.length;
   };
 
+  const saveSelectedAnswer = (selectedAnswer: string) => {
+    userAnswers.value.push(selectedAnswer);
+  };
+
   const nextQuestion = (selectedAnswer: string) => {
     // Save selected answer
-    userAnswers.value.push(selectedAnswer);
+    saveSelectedAnswer(selectedAnswer);
     // Go to next question
     currentQuestionNum.value++;
     currentQuestion.value = questions.value[currentQuestionNum.value];
+  };
+
+  const reset = () => {
+    questions.value = [];
+    currentQuestion.value = null;
+    currentQuestionNum.value = 0;
+    totalQuestions.value = 0;
+    userAnswers.value = [];
+    result.value = null;
   };
 
   return {
@@ -37,8 +52,11 @@ export const useTriviaStore = defineStore("trivia", () => {
     currentQuestionNum,
     totalQuestions,
     userAnswers,
+    result,
     // Actions
     setQuestions,
+    saveSelectedAnswer,
     nextQuestion,
+    reset,
   };
 });

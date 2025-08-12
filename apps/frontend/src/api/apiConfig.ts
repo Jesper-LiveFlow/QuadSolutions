@@ -6,7 +6,7 @@
  */
 
 // BASE_URL: API url of backend
-const BASE_URL: string = "http://localhost:8080/api";
+const BASE_URL: string = "http://localhost:8080";
 // API_TIMEOUT: API timeout in seconds
 const API_TIMEOUT: number = 10000;
 // DEFAULT_HEADERS: Default request headers to tell server what kind of data is sent
