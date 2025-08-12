@@ -1,6 +1,8 @@
 spring:
   application:
     name: trivia
+  profiles:
+    active: dev
 
 third-party:
   opentdb:
