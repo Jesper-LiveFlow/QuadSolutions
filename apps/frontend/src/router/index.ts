@@ -1,3 +1,10 @@
+/**
+ * index.ts
+ * ---------------------------------------
+ * Configuration file for Vue Router
+ *
+ */
+
 // IMPORTS ------------------------------------------------
 /** ROUTER IMPORTS */
 import { createRouter, createWebHistory } from "vue-router";

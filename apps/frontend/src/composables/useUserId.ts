@@ -1,5 +1,17 @@
+/**
+ * useUserId.ts
+ * ---------------------------------------
+ * Composable for handling and managaing UUID's
+ * - Creating UUID when no UUID found in local storage
+ * - Storing UUID in local storage
+ * - Getting UUID when UUID is found in local storage
+ *
+ */
+
+// IMPORTS ------------------------------------------------
 import { ref } from "vue";
 import { v4 as uuidv4 } from "uuid";
+// --------------------------------------------------------
 
 export const useUuid = () => {
   // Create empty user uuid
