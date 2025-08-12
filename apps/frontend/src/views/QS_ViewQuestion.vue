@@ -39,6 +39,11 @@ import QS_ProgressBar from "@/components/question/QS_ProgressBar.vue";
 import QS_Timer from "@/components/question/QS_Timer.vue";
 import QS_AnswerList from "@/components/question/QS_AnswerList.vue";
 import QS_ConfirmButton from "@/components/question/QS_ConfirmButton.vue";
+/** COMPOSABLE IMPORTS */
+import { useUuid } from "@/composables/useUserId";
+const { userUuid } = useUuid();
+/** SERVICE IMPORTS */
+import { checkAnswers } from "@/api/services";
 /** STORE IMPORTS */
 import { useTriviaStore } from "@/stores/triviaStore";
 const triviaStore = useTriviaStore();
@@ -64,7 +69,7 @@ const stopTimer = () => {
   if (timer) clearInterval(timer);
 };
 
-const confirmAnswer = () => {
+const confirmAnswer = async () => {
   // Stop timer for current question
   stopTimer();
 
@@ -72,16 +77,36 @@ const confirmAnswer = () => {
   if (triviaStore.currentQuestionNum < triviaStore.totalQuestions - 1) {
     // Save answer and go to next question
     triviaStore.nextQuestion(selectedAnswer.value);
+
+    // Restart timer
+    startTimer();
   } else {
-    // Go to result view
-    router.push({ name: "result" });
+    try {
+      // Save last answer
+      triviaStore.saveSelectedAnswer(selectedAnswer.value);
+
+      // Check answers
+      const result = await checkAnswers(userUuid.value, triviaStore.userAnswers);
+
+      // Check if there was a valid response
+      if (result == null || !result) {
+        throw new Error("No result found");
+      }
+
+      // Set result in store
+      triviaStore.result = result;
+
+      // Go to result view
+      router.push({ name: "result" });
+    } catch {
+      alert("There was an error trying to check your answers.");
+      // Go to home view
+      router.push({ name: "home" });
+    }
   }
 
   // Clear selected answer
   selectedAnswer.value = "";
-
-  // Restart timer
-  startTimer();
 };
 
 // Define lifecycle hooks

@@ -31,12 +31,17 @@ const startTrivia = async () => {
     // Fetch questions from backend
     const questions = await getQuestions(userUuid.value);
 
+    // Check if there was a valid response
+    if (questions == null || !questions || questions.length === 0) {
+      throw new Error("No questions found");
+    }
+
     // Set questions in store
     triviaStore.setQuestions(questions);
 
     // Push user to question view
     router.push({ name: "question" });
-  } catch (error) {
+  } catch {
     alert("There was an error trying to load new questions.");
   }
 };
