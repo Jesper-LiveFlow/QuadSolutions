@@ -100,6 +100,10 @@ const confirmAnswer = async () => {
       router.push({ name: "result" });
     } catch {
       alert("There was an error trying to check your answers.");
+
+      // Reset trivia store
+      triviaStore.reset();
+
       // Go to home view
       router.push({ name: "home" });
     }

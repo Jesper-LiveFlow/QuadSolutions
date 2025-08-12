@@ -7,7 +7,7 @@
       :class="{ 'ring-4 ring-yellow-400 scale-105': selected === answer }"
       @click="$emit('update:selected', answer)"
     >
-      {{ answer }}
+      <span v-html="answer"></span>
     </button>
   </div>
 </template>

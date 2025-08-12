@@ -36,14 +36,15 @@
                   : 'bg-red-500/30 text-red-200',
               ]"
             >
-              {{ userAnswer || "No answer" }}
+              <span v-if="userAnswer" v-html="userAnswer"></span>
+              <span v-else>No answer</span>
             </span>
           </div>
 
           <div v-if="userAnswer !== correctAnswers[index]" class="text-white/90">
             <span class="font-medium">Correct answer:</span>
             <span class="ml-2 px-2 py-1 rounded text-sm bg-green-500/30 text-green-200">
-              {{ correctAnswers[index] }}
+              <span v-html="correctAnswers[index]"></span>
             </span>
           </div>
         </div>

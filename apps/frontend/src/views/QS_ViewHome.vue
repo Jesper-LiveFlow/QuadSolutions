@@ -42,14 +42,14 @@ const startTrivia = async () => {
     // Push user to question view
     router.push({ name: "question" });
   } catch {
+    // Alert user
     alert("There was an error trying to load new questions.");
+
+    // Reset trivia store
+    triviaStore.reset();
+
+    // Go to home view
+    router.push({ name: "home" });
   }
 };
-
-// Define lifecycle hooks
-onMounted(async () => {
-  // const questions = await getQuestions();
-  // console.log(questions);
-  // console.log("You're UUID: " + userUuid.value);
-});
 </script>
