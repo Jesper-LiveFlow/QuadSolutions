@@ -23,8 +23,22 @@ import { getQuestions } from "@/api/services";
 import { useTriviaStore } from "@/stores/triviaStore";
 
 // Define Methods
-const startTrivia = () => {
-  router.push({ name: "question" });
+const startTrivia = async () => {
+  // Instantiate trivia store
+  const triviaStore = useTriviaStore();
+
+  try {
+    // Fetch questions from backend
+    const questions = await getQuestions(userUuid.value);
+
+    // Set questions in store
+    triviaStore.setQuestions(questions);
+
+    // Push user to question view
+    router.push({ name: "question" });
+  } catch (error) {
+    alert("There was an error trying to load new questions.");
+  }
 };
 
 // Define lifecycle hooks

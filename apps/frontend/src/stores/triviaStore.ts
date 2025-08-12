@@ -1,5 +1,5 @@
 /** VUE IMIPORTS */
-import { ref, computed } from "vue";
+import { ref } from "vue";
 /** PINIA IMPORTS */
 import { defineStore } from "pinia";
 /** TYPE IMPORTS */
@@ -9,23 +9,36 @@ import type { Question } from "@/types/Question";
 export const useTriviaStore = defineStore("trivia", () => {
   /** STATES */
   const questions = ref<Question[]>([]);
-  const currentQuestion = ref(0);
+  const currentQuestion = ref<Question>(null);
+  const currentQuestionNum = ref(0);
   const totalQuestions = ref(0);
   const userAnswers = ref<string[]>([]);
-  /** COMPUTED STATES */
-  // ...
   /** ACTIONS */
-  // ...
+  const setQuestions = (newQuestions: Question[]) => {
+    // Set new questions and init states
+    questions.value = newQuestions;
+    currentQuestionNum.value = 0;
+    currentQuestion.value = questions.value[currentQuestionNum.value];
+    totalQuestions.value = newQuestions.length;
+  };
+
+  const nextQuestion = (selectedAnswer: string) => {
+    // Save selected answer
+    userAnswers.value.push(selectedAnswer);
+    // Go to next question
+    currentQuestionNum.value++;
+    currentQuestion.value = questions.value[currentQuestionNum.value];
+  };
 
   return {
     // States
     questions,
     currentQuestion,
+    currentQuestionNum,
     totalQuestions,
     userAnswers,
-    // Computed States
-    // ...
     // Actions
-    // ...
+    setQuestions,
+    nextQuestion,
   };
 });
