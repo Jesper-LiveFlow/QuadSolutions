@@ -10,17 +10,18 @@
 
 // IMPORTS ------------------------------------------------
 import { ref } from "vue";
+import type { Ref } from "vue";
 import { v4 as uuidv4 } from "uuid";
 // --------------------------------------------------------
 
-export const useUuid = () => {
+export const useUuid = (): { userUuid: Ref<string> } => {
   // Create empty user uuid
   let userUuid = ref<string>("");
 
   // Check if window exists (otherwise localstorage is not accessable)
   if (typeof window != "undefined") {
     // Get uuid from local storage
-    let uuid = localStorage.getItem("qs_trivia_uuid");
+    let uuid: string = localStorage.getItem("qs_trivia_uuid");
     // Check if there is a uuid in local storage
     if (!uuid) {
       // If not, create new one and save in local storage
