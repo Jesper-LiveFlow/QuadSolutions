@@ -17,6 +17,7 @@ import java.util.List;
 public class TriviaService {
     private final TriviaApiClient triviaApiClient;
     private final AnswerRepository answerRepository;
+    private final ResultCalculatorService resultCalculatorService;
 
     /**
      * Fetches trivia questions from a Trivia API Client and saves correct answers in a Answer Repository
@@ -48,7 +49,7 @@ public class TriviaService {
         var correctAnswers = answerRepository.getAnswers(uuid);
 
         // Get score and total number of questions
-        byte score = ResultCalculatorService.calculateScore(userAnswers, correctAnswers);
+        byte score = resultCalculatorService.calculateScore(userAnswers, correctAnswers);
         byte totalQuestions = (byte) correctAnswers.size();
 
         // Return result
