@@ -5,7 +5,7 @@ import com.jesperweijnen.trivia.dto.QuestionDto;
 import java.util.List;
 
 public interface TriviaApiClient {
-    List<QuestionDto> fetchQuestions(String uuid);
+    List<QuestionDto> fetchQuestions();
 
-    List<String> getCorrectAnswers(String uuid, List<QuestionDto> questions);
+    List<String> getCorrectAnswers(List<QuestionDto> questions);
 }

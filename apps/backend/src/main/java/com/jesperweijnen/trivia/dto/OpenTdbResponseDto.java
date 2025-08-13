@@ -1,4 +1,4 @@
-package com.jesperweijnen.trivia.model;
+package com.jesperweijnen.trivia.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,8 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class OpenTdbResponse {
+public class OpenTdbResponseDto {
     @JsonProperty("response_code")
     private int responseCode;
-    private List<OpenTdbQuestion> results;
+    private List<OpenTdbQuestionDto> results;
 }

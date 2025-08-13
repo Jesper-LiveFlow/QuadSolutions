@@ -20,17 +20,17 @@ public class TriviaController {
      * Questions are saved in memory under uuid.
      */
     @GetMapping("questions")
-    public List<QuestionDto> getQuestions(@RequestParam(required = true, name = "uuid") String uuid) {
+    public List<QuestionDto> getQuestions(@RequestParam(name = "uuid") String uuid) {
         return triviaService.getQuestions(uuid);
     }
 
     /**
-     * POST /api/checkanswers?=uuid=<uuid>
+     * POST /api/checkanswers?uuid=<uuid>
      * Returns result of quiz.
      */
     @PostMapping("checkanswers")
     public ResultDto checkAnswers(
-            @RequestParam(required = true, name = "uuid") String uuid,
+            @RequestParam(name = "uuid") String uuid,
             @RequestBody List<String> userAnswers
     ) {
         return triviaService.getResult(uuid, userAnswers);

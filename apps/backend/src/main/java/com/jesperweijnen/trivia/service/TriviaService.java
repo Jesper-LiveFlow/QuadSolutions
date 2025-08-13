@@ -26,8 +26,8 @@ public class TriviaService {
      */
     public List<QuestionDto> getQuestions(String uuid) {
         // Get questions and correct answers
-        var questions = triviaApiClient.fetchQuestions(uuid);
-        var correctAnswers = triviaApiClient.getCorrectAnswers(uuid, questions);
+        var questions = triviaApiClient.fetchQuestions();
+        var correctAnswers = triviaApiClient.getCorrectAnswers(questions);
 
         // Save correct answers in AnswerRepository
         answerRepository.saveAnswers(uuid, correctAnswers);
