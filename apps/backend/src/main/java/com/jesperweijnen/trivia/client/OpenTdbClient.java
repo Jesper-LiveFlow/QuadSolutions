@@ -1,8 +1,8 @@
 package com.jesperweijnen.trivia.client;
 
 import com.jesperweijnen.trivia.dto.QuestionDto;
-import com.jesperweijnen.trivia.dto.OpenTdbQuestionDto;
-import com.jesperweijnen.trivia.dto.OpenTdbResponseDto;
+import com.jesperweijnen.trivia.dto.external.OpenTdbQuestionDto;
+import com.jesperweijnen.trivia.dto.external.OpenTdbResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

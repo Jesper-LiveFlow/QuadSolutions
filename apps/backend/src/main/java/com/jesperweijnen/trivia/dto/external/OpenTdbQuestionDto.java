@@ -1,4 +1,4 @@
-package com.jesperweijnen.trivia.dto;
+package com.jesperweijnen.trivia.dto.external;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
