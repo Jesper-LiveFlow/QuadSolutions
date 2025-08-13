@@ -14,7 +14,7 @@ public class ResultCalculatorService {
      * @param correctAnswers list of correct answers stored in the repository
      * @return number of correct answers matched
      */
-    public static byte calculateScore(List<String> userAnswers, List<String> correctAnswers) {
+    public byte calculateScore(List<String> userAnswers, List<String> correctAnswers) {
         // Make sure there is at least 1 user and 1 correct answer
         if (userAnswers == null || correctAnswers == null) {
             return 0;

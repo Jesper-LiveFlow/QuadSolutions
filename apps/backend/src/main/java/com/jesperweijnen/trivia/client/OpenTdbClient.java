@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OpenTdbClient implements TriviaApiClient {
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private static final int OPENTDB_SUCCESS_CODE = 0;
 
     // API url for Open Trivia DB
