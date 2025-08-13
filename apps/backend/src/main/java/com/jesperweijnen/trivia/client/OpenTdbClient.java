@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OpenTdbClient implements TriviaApiClient {
     private final RestTemplate restTemplate = new RestTemplate();
+    private static final int OPENTDB_SUCCESS_CODE = 0;
 
     // API url for Open Trivia DB
     @Value("${third-party.opentdb.url}")
@@ -36,7 +37,7 @@ public class OpenTdbClient implements TriviaApiClient {
         var response = restTemplate.getForObject(opentdbUrl + "?amount=" + questionTotal, OpenTdbResponseDto.class);
 
         // Check if response was returned successfully and with non-null results
-        if (response == null || response.getResponseCode() != 0 || response.getResults() == null) {
+        if (response == null || response.getResponseCode() != OPENTDB_SUCCESS_CODE || response.getResults() == null) {
             throw new RuntimeException("Failed to fetch trivia questions");
         }
         // We can now assume that the questions are in the response's results
